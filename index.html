@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Tareo - Metso</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=49.0">
+</head>
+<body>
+    <div class="top-toggles">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="btn-theme-toggle" aria-label="Cambiar tema">
+            <svg id="icon-sun" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        
+        <!-- Sound Toggle -->
+        <button id="sound-toggle" class="btn-theme-toggle" aria-label="Activar/Desactivar sonido" style="margin-left: 10px;">
+            <svg id="icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            <svg id="icon-sound-off" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <div class="glass-card login-card">
+            <div class="logo-container">
+                <div class="logo-icon">M</div>
+                <h2>Tareo Planta</h2>
+            </div>
+            <p class="subtitle">Inicia sesión con tus credenciales</p>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="login-user">Usuario (Primer Nombre + Apellido)</label>
+                    <div class="input-with-icon">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <input type="text" id="login-user" placeholder="Ej. Juan Perez" required autocomplete="off">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="login-dni">Clave (DNI para trabajadores)</label>
+                    <div class="input-with-icon">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        <input type="password" id="login-dni" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Ingresar</button>
+                <p class="login-hint">Contraseñas de administrador deben solicitarse a Michel Maldonado.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- App Screen (Worker / Admin) -->
+    <div id="app-screen" class="screen">
+        <!-- Sidebar / Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">Tareo Planta</div>
+            <div class="nav-user">
+                <span id="current-user-name" style="font-weight: 600;">Usuario</span>
+                <button id="logout-btn" class="btn-primary btn-small">Salir</button>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <!-- GREETING -->
+            <div id="greeting-container" style="margin-bottom: 24px;">
+                <h2 id="greeting-title" style="margin-bottom: 4px; color: var(--accent-primary);">Hola 👋</h2>
+                <p id="greeting-subtitle" style="margin-bottom: 15px; color: var(--text-secondary);">¡Gran trabajo hoy! No olvides registrar todas tus actividades.</p>
+                
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div class="mascot-container" id="mascot-container" style="display: none;">
+                        <img alt="Mascota" class="mascot-img" id="mascot-image">
+                        <div class="mascot-bubble" id="mascot-bubble">¡Sigue así!</div>
+                    </div>
+                    <div id="worker-badges" style="display: none; gap: 10px; flex-wrap: wrap; flex-direction: column;">
+                        <span class="streak-badge streak-daily">🔥 <span id="daily-streak-text">0 días</span></span>
+                        <span class="streak-badge streak-weekly">🏆 <span id="weekly-streak-text">0 sem</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WORKER VIEW -->
+            <div id="worker-view" class="view active">
+                
+                <div class="admin-nav" style="margin-bottom: 20px;">
+                    <button class="btn-tab active" onclick="switchWorkerView(this, 'daily')">Registro Diario</button>
+                    <button class="btn-tab" onclick="switchWorkerView(this, 'history')">Mi Historial</button>
+                    <button class="btn-tab" onclick="switchWorkerView(this, 'assistant')">Mi Asistente 🤖</button>
+                </div>
+
+                <!-- Tab: Registro Diario -->
+                <div id="tab-worker-registro" class="tab-content active">
+                    <!-- Progress Dashboard -->
+                <div class="dashboard-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                    <div class="glass-card stat-card">
+                        <h3>Progreso Diario (HN)</h3>
+                        <div class="progress-bar-container">
+                            <div id="normal-progress-bar" class="progress-bar" style="width: 0%;"></div>
+                        </div>
+                        <p id="normal-hours-text">0 / 9.25 hh</p>
+                    </div>
+                    <div class="glass-card stat-card">
+                        <h3>Horas Extra (Hoy)</h3>
+                        <p id="extra-hours-text" class="stat-big" style="margin-top: 10px;">0.00 hh</p>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <!-- Formulario de Tareo -->
+                    <div class="glass-card form-container">
+                        <h3 style="color: var(--accent-primary);">Registrar Tarea</h3>
+                        <form id="tareo-form">
+                            <!-- Fijos -->
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="fecha">Fecha</label>
+                                    <input type="date" id="fecha" class="date-custom" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="turno">Turno</label>
+                                    <select id="turno" required>
+                                        <option value="Día">Día (Max 9.25h normales)</option>
+                                        <option value="Noche">Noche (Max 11.25h normales)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <hr class="divider">
+
+                            <!-- Variables -->
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="wo">Orden de Trabajo (WO)</label>
+                                    <div class="autocomplete-wrapper" style="position: relative;">
+                                        <input type="text" id="wo" placeholder="Escribe o selecciona..." required autocomplete="off">
+                                    </div>
+                                    <input type="text" id="wo-title-display" readonly disabled style="margin-top: 8px; background: var(--bg-card); color: var(--accent-primary); border: 1px dashed var(--border-glass);" placeholder="Título de la WO...">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="input-group">
+                                    <label for="horas">Horas</label>
+                                    <input type="number" id="horas" step="0.25" min="0.25" placeholder="Ej. 2.5" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="tipo-hora">Tipo de Hora</label>
+                                    <select id="tipo-hora" required>
+                                        <option value="Normales">Normales</option>
+                                        <option value="SHE">SHE (Extra)</option>
+                                        <option value="DHE">DHE (Doble)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="etapa">Etapa de la Reparación</label>
+                                <select id="etapa" required>
+                                    <option value="" disabled selected>Selecciona una etapa...</option>
+                                    <option value="1. Recepción">1. Recepción</option>
+                                    <option value="2. Desmontaje, limpieza y evaluación">2. Desmontaje, limpieza y evaluación</option>
+                                    <option value="3. Reparación">3. Reparación</option>
+                                    <option value="4. Liberación de Calidad">4. Liberación de Calidad</option>
+                                    <option value="5. Despacho">5. Despacho</option>
+                                    <option value="6. -">6. -</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="actividad">Actividad</label>
+                                <select id="actividad" required>
+                                    <option value="" disabled selected>Selecciona una actividad...</option>
+                                    <!-- Options generated via JS -->
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="descripcion">Describe tu actividad</label>
+                                <textarea id="descripcion" rows="2" placeholder="Detalles del trabajo realizado..." required></textarea>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="maquina">Máquina</label>
+                                <select id="maquina" required>
+                                    <option value="Ninguna / No aplica">Ninguna / No aplica</option>
+                                    <option value="MONTACARGA DE 15 TN">MONTACARGA DE 15 TN</option>
+                                    <option value="SCHIESS">SCHIESS</option>
+                                    <option value="MANDRINO">MANDRINO</option>
+                                    <option value="STANKO">STANKO</option>
+                                    <option value="OPTIMUM">OPTIMUM</option>
+                                    <option value="FRESA">FRESA</option>
+                                    <option value="TOSS">TOSS</option>
+                                </select>
+                            </div>
+
+                            <div class="form-row toggle-row">
+                                <label class="toggle-label" style="font-weight: 500;">¿Hubo Reproceso?</label>
+                                <label class="switch">
+                                    <input type="checkbox" id="reproceso">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+
+                            <div class="input-group" id="reproceso-motivo-group" style="display: none;">
+                                <label for="reproceso-motivo">¿Por qué fue el reproceso?</label>
+                                <input type="text" id="reproceso-motivo" placeholder="Explique la razón...">
+                            </div>
+
+                            <button type="submit" class="btn-primary btn-block">Registrar Actividad</button>
+                        </form>
+                    </div>
+
+                    <!-- Daily Logs List -->
+                    <div class="glass-card list-container">
+                        <h3>Tus Registros de Hoy</h3>
+                        <div id="daily-logs-list" class="logs-list">
+                            <!-- Injected via JS -->
+                            <p class="empty-state">No hay registros para la fecha seleccionada.</p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Tab: Mi Historial -->
+                <div id="tab-worker-historial" class="tab-content" style="display: none;">
+                    <h2 style="margin-bottom: 15px;">Mi Historial Semanal</h2>
+                    
+                    <div class="dashboard-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div class="glass-card stat-card">
+                            <h3>Meta Semanal (HN)</h3>
+                            <div class="progress-bar-container">
+                                <div id="weekly-normal-progress-bar" class="progress-bar" style="width: 0%; background: #4CAF50;"></div>
+                            </div>
+                            <p id="weekly-normal-hours-text">0 / 46.25 hh</p>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <h3 style="color: var(--accent-primary);">Horas de Permiso</h3>
+                            <p id="weekly-permisos-text" class="stat-big" style="margin-top: 10px; color: var(--accent-primary);">0.00 hh</p>
+                            <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 5px;">(Por compensar en esta semana)</p>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <h3 style="color: var(--accent-primary);">Horas Extra Acumuladas</h3>
+                            <div style="display: flex; gap: 5px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <label for="extra-desde" style="font-size: 10px; color: var(--text-muted);">Desde:</label>
+                                    <input type="date" id="extra-desde" class="date-custom small-padding" style="font-size: 11px; padding: 2px 4px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); color: white; border-radius: 4px;">
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <label for="extra-hasta" style="font-size: 10px; color: var(--text-muted);">Hasta:</label>
+                                    <input type="date" id="extra-hasta" class="date-custom small-padding" style="font-size: 11px; padding: 2px 4px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); color: white; border-radius: 4px;">
+                                </div>
+                            </div>
+                            <p id="accumulated-extra-hours-text" class="stat-big" style="margin-top: 10px; color: var(--accent-primary);">0.00 hh</p>
+                            <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 5px;">(En el rango seleccionado)</p>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <h3 style="color: var(--accent-primary);">Permisos Acumulados</h3>
+                            <div style="display: flex; gap: 5px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <label for="permiso-desde" style="font-size: 10px; color: var(--text-muted);">Desde:</label>
+                                    <input type="date" id="permiso-desde" class="date-custom small-padding" style="font-size: 11px; padding: 2px 4px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); color: white; border-radius: 4px;">
+                                </div>
+                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                    <label for="permiso-hasta" style="font-size: 10px; color: var(--text-muted);">Hasta:</label>
+                                    <input type="date" id="permiso-hasta" class="date-custom small-padding" style="font-size: 11px; padding: 2px 4px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); color: white; border-radius: 4px;">
+                                </div>
+                            </div>
+                            <p id="accumulated-permisos-text" class="stat-big" style="margin-top: 10px; color: var(--accent-primary);">0.00 hh</p>
+                            <p style="font-size: 0.75em; color: var(--text-muted); margin-top: 5px;">(En el rango seleccionado)</p>
+                        </div>
+                    </div>
+                    <div class="glass-card" style="margin-bottom: 20px; overflow: hidden;">
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1; margin-bottom: 10px;">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
+                                    <button class="btn-secondary" onclick="changeWorkerWeek(-7)" style="padding: 8px 15px; font-size: 1.2em; border-radius: 8px; width: auto;">◀</button>
+                                    <div style="text-align: center;">
+                                        <div id="worker-week-display" style="font-weight: bold; font-size: 1.2em; color: var(--accent-primary);">Semana Actual</div>
+                                        <p id="worker-matrix-date-range" style="color: var(--text-muted); font-size: 0.9em; margin-top: 5px; font-weight: 500;"></p>
+                                    </div>
+                                    <button class="btn-secondary" onclick="changeWorkerWeek(7)" style="padding: 8px 15px; font-size: 1.2em; border-radius: 8px; width: auto;">▶</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 10px; padding-bottom: 10px; overflow-x: auto;">
+                            <!-- Tabla HN Día -->
+                            <div style="min-width: 600px;">
+                                <h3 style="text-align: center; background: rgba(0,0,0,0.4); color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); padding: 8px; margin: 0; font-size: 14px; text-transform: uppercase;">HN TURNO DÍA</h3>
+                                <table class="matrix-table" id="worker-matrix-dia" style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
+                                    <thead>
+                                        <tr style="background: rgba(0,0,0,0.2); color: var(--text-main);">
+                                            <th style="text-align: left; padding: 8px;">Apellidos y Nombres</th>
+                                            <th style="padding: 8px;">lunes</th><th style="padding: 8px;">martes</th><th style="padding: 8px;">miércoles</th><th style="padding: 8px;">jueves</th><th style="padding: 8px;">viernes</th><th style="padding: 8px;">sábado</th><th style="padding: 8px;">domingo</th><th style="padding: 8px;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <!-- Tabla HN Noche -->
+                            <div style="min-width: 600px;">
+                                <h3 style="text-align: center; background: rgba(0,0,0,0.4); color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); padding: 8px; margin: 0; font-size: 14px; text-transform: uppercase;">HN TURNO NOCHE</h3>
+                                <table class="matrix-table" id="worker-matrix-noche" style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
+                                    <thead>
+                                        <tr style="background: rgba(0,0,0,0.2); color: var(--text-main);">
+                                            <th style="text-align: left; padding: 8px;">Apellidos y Nombres</th>
+                                            <th style="padding: 8px;">lunes</th><th style="padding: 8px;">martes</th><th style="padding: 8px;">miércoles</th><th style="padding: 8px;">jueves</th><th style="padding: 8px;">viernes</th><th style="padding: 8px;">sábado</th><th style="padding: 8px;">domingo</th><th style="padding: 8px;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <!-- Tabla SHE -->
+                            <div style="min-width: 600px;">
+                                <h3 style="text-align: center; background: rgba(0,0,0,0.4); color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); padding: 8px; margin: 0; font-size: 14px; text-transform: uppercase;">SHE (HORAS EXTRA SIMPLES)</h3>
+                                <table class="matrix-table" id="worker-matrix-she" style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
+                                    <thead>
+                                        <tr style="background: rgba(0,0,0,0.2); color: var(--text-main);">
+                                            <th style="text-align: left; padding: 8px;">Apellidos y Nombres</th>
+                                            <th style="padding: 8px;">lunes</th><th style="padding: 8px;">martes</th><th style="padding: 8px;">miércoles</th><th style="padding: 8px;">jueves</th><th style="padding: 8px;">viernes</th><th style="padding: 8px;">sábado</th><th style="padding: 8px;">domingo</th><th style="padding: 8px;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <!-- Tabla DHE -->
+                            <div style="min-width: 600px;">
+                                <h3 style="text-align: center; background: rgba(0,0,0,0.4); color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); padding: 8px; margin: 0; font-size: 14px; text-transform: uppercase;">DHE (HORAS EXTRA DOBLES)</h3>
+                                <table class="matrix-table" id="worker-matrix-dhe" style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
+                                    <thead>
+                                        <tr style="background: rgba(0,0,0,0.2); color: var(--text-main);">
+                                            <th style="text-align: left; padding: 8px;">Apellidos y Nombres</th>
+                                            <th style="padding: 8px;">lunes</th><th style="padding: 8px;">martes</th><th style="padding: 8px;">miércoles</th><th style="padding: 8px;">jueves</th><th style="padding: 8px;">viernes</th><th style="padding: 8px;">sábado</th><th style="padding: 8px;">domingo</th><th style="padding: 8px;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- CHATBOT VIEW (Worker) -->
+            <div id="tab-worker-assistant" class="tab-content" style="display: none;">
+                <div class="glass-card chat-container">
+                    <div class="chat-header">
+                        <div class="chat-header-mascot">
+                            <img src="mascot.png" alt="Mascota Tareo">
+                        </div>
+                        <div>
+                            <h3>TareoBot</h3>
+                            <p style="font-size: 0.8rem; color: var(--accent-primary);">En línea</p>
+                        </div>
+                    </div>
+                    <div id="chat-messages" class="chat-messages">
+                        <div class="chat-message bot">
+                            <div class="bubble">
+                                ¡Bip bop! Hola, soy tu asistente virtual. Conozco todas las reglas de Tareo Planta y tengo acceso a tus registros. ¿En qué te puedo ayudar hoy?
+                            </div>
+                        </div>
+                    </div>
+                    <form id="chat-form" class="chat-input-area">
+                        <input type="text" id="chat-input" placeholder="Ej. ¿Cuántas horas extra tengo?" autocomplete="off">
+                        <button type="submit" class="btn-primary btn-chat-send">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            </div>
+
+            <!-- ADMIN VIEW -->
+            <div id="admin-view" class="view" style="display: none;">
+                <div class="admin-nav">
+                    <button class="btn-tab active" data-tab="tab-dashboard">Dashboard</button>
+                    <button class="btn-tab" data-tab="tab-omisiones">Control Omisiones</button>
+                    <button class="btn-tab" data-tab="tab-personal">Personal</button>
+                    <button class="btn-tab" data-tab="tab-config">Config & WOs</button>
+                </div>
+
+                <!-- Tab: Dashboard -->
+                <div id="tab-dashboard" class="tab-content active">
+                    <h2>Resumen General</h2>
+                    <div class="dashboard-cards">
+                        <div class="glass-card stat-card">
+                            <h3 id="label-registros">Total Registros (Mes)</h3>
+                            <p id="admin-total-logs" class="stat-big">0</p>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <h3 id="label-normales">Horas Normales (Mes)</h3>
+                            <p id="admin-total-normal" class="stat-big">0 hh</p>
+                        </div>
+                        <div class="glass-card stat-card">
+                            <h3 id="label-extra">Horas Extra (Mes)</h3>
+                            <p id="admin-total-extra" class="stat-big">0 hh</p>
+                        </div>
+                    </div>
+                    <div class="glass-card" style="margin-top: 24px;">
+                        <h3>Exportar Data</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 15px;">Descarga toda la data registrada en formato CSV para importarla a SharePoint / Excel.</p>
+                        <button id="export-csv-btn" class="btn-primary" style="width: auto;">Descargar Excel (CSV)</button>
+                        <button id="clear-data-btn" class="btn-danger" style="width: auto; margin-left: 10px; display: none;">Borrar Todos los Datos</button>
+                    </div>
+                </div>
+
+                <!-- Tab: Omisiones -->
+                <div id="tab-omisiones" class="tab-content" style="display: none;">
+                    <h2>Dashboard Matriz Semanal</h2>
+                    
+                    <div class="glass-card" style="margin-bottom: 20px; overflow: hidden;">
+                        <div class="form-row">
+                            <div class="input-group" style="flex: 1; align-items: center; margin-bottom: 10px;">
+                                <div style="display: flex; align-items: center; justify-content: flex-start; gap: 20px;">
+                                    <button class="btn-secondary" onclick="changeAdminWeek(-7)" style="padding: 8px 15px; font-size: 1.2em; border-radius: 8px; width: auto;">◀</button>
+                                    <div style="text-align: center; min-width: 250px;">
+                                        <div id="admin-week-display" style="font-weight: bold; font-size: 1.2em; color: var(--accent-primary);">Semana Actual</div>
+                                        <p id="admin-matrix-date-range" style="color: var(--text-muted); font-size: 0.9em; margin-top: 5px; font-weight: 500;"></p>
+                                    </div>
+                                    <button class="btn-secondary" onclick="changeAdminWeek(7)" style="padding: 8px 15px; font-size: 1.2em; border-radius: 8px; width: auto;">▶</button>
+                                </div>
+                            </div>
+                            <div class="input-group" style="flex: 2;">
+                                <label for="matrix-search">Buscar Trabajador (Apellidos y Nombres)</label>
+                                <input type="text" id="matrix-search" placeholder="Escribe para filtrar...">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 20px; overflow-x: auto; margin-top: 10px; padding-bottom: 10px;">
+                            <!-- Tabla Turno Día -->
+                            <div style="flex: 1; min-width: 600px;">
+                                <h3 style="text-align: center; background: rgba(0,0,0,0.4); color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); padding: 8px; margin: 0; font-size: 14px; text-transform: uppercase;">HN Turno Día</h3>
+                                <table class="matrix-table" id="matrix-dia" style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
+                                    <thead>
+                                        <tr style="background: rgba(0,0,0,0.2); color: var(--text-main);">
+                                            <th style="text-align: left; padding: 8px;">Apellidos y Nombres</th>
+                                            <th style="padding: 8px;">lunes</th><th style="padding: 8px;">martes</th><th style="padding: 8px;">miércoles</th><th style="padding: 8px;">jueves</th><th style="padding: 8px;">viernes</th><th style="padding: 8px;">sábado</th><th style="padding: 8px;">domingo</th><th style="padding: 8px;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <!-- Tabla Turno Noche -->
+                            <div style="flex: 1; min-width: 600px;">
+                                <h3 style="text-align: center; background: rgba(0,0,0,0.4); color: var(--accent-primary); border-bottom: 2px solid var(--accent-primary); padding: 8px; margin: 0; font-size: 14px; text-transform: uppercase;">HN Turno Noche</h3>
+                                <table class="matrix-table" id="matrix-noche" style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
+                                    <thead>
+                                        <tr style="background: rgba(0,0,0,0.2); color: var(--text-main);">
+                                            <th style="text-align: left; padding: 8px;">Apellidos y Nombres</th>
+                                            <th style="padding: 8px;">lunes</th><th style="padding: 8px;">martes</th><th style="padding: 8px;">miércoles</th><th style="padding: 8px;">jueves</th><th style="padding: 8px;">viernes</th><th style="padding: 8px;">sábado</th><th style="padding: 8px;">domingo</th><th style="padding: 8px;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Reporte Diario Simple (WhatsApp)</h2>
+                    <div class="glass-card">
+                        <div class="input-group" style="max-width: 250px;">
+                            <label for="admin-fecha-omision">Seleccionar Fecha para Texto</label>
+                            <input type="date" id="admin-fecha-omision" class="date-custom">
+                        </div>
+                        <div id="omisiones-reporte" style="margin-top: 15px; margin-bottom: 20px; line-height: 1.6; border-left: 3px solid var(--primary-color); padding-left: 15px;">
+                            <!-- JS Injected -->
+                        </div>
+                        <button id="btn-copiar-whatsapp" class="btn-success">Copiar para WhatsApp</button>
+                    </div>
+                </div>
+
+                <!-- Tab: Personal -->
+                <div id="tab-personal" class="tab-content" style="display: none;">
+                    <h2>Gestión de Personal</h2>
+                    <div class="glass-card">
+                        <form id="form-add-personal" class="form-row" style="align-items: flex-end;">
+                            <div class="input-group" style="margin-bottom: 0;">
+                                <label for="new-user-name">Usuario (Ej. Juan Perez)</label>
+                                <input type="text" id="new-user-name" required>
+                            </div>
+                            <div class="input-group" style="margin-bottom: 0;">
+                                <label for="new-user-dni">Clave (DNI)</label>
+                                <input type="text" id="new-user-dni" required>
+                            </div>
+                            <button type="submit" class="btn-primary" style="height: 42px; width: auto;">Agregar</button>
+                        </form>
+                        <div style="overflow-x: auto; margin-top: 20px;">
+                            <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>DNI (Clave)</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="personal-table-body">
+                                    <!-- JS Injected -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Config -->
+                <div id="tab-config" class="tab-content" style="display: none;">
+                    <h2>Configuración y WOs</h2>
+                    
+                    <div class="glass-card" style="margin-bottom: 20px;">
+                        <h3>Instrucciones para Administrar la Aplicación</h3>
+                        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 10px;">
+                            Para actualizar las WOs o la URL del Webhook (Power Automate), debes modificar el archivo <strong>config.js</strong>.
+                        </p>
+                        <ol style="color: var(--text-muted); line-height: 1.6; margin-top: 15px; margin-left: 20px;">
+                            <li>Abre la carpeta <strong>APP TAREO</strong> en tu computadora.</li>
+                            <li>Busca el archivo llamado <code>config.js</code> y ábrelo con el Bloc de notas.</li>
+                            <li>Pega tu nueva lista de WOs desde Excel entre las comillas invertidas.</li>
+                            <li>Guarda el archivo.</li>
+                            <li>Actualiza la página web para ver los cambios.</li>
+                        </ol>
+                    </div>
+
+                    <div class="glass-card" style="border: 1px solid #ff4d4d; background: rgba(255, 77, 77, 0.05);">
+                        <h3 style="color: #ff4d4d;">Zona de Peligro</h3>
+                        <p style="color: var(--text-muted); line-height: 1.6; margin-top: 10px; margin-bottom: 15px;">
+                            Usa este botón si deseas eliminar absolutamente todos los registros de tareas ingresados por todos los trabajadores en esta laptop. Esta acción no se puede deshacer.
+                        </p>
+                        <button class="btn-primary" style="background: #ff4d4d;" onclick="clearAllLogs()">Borrar Todos los Registros</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="config.js?v=49.0"></script>
+    <script src="app.js?v=49.0"></script>
+</body>
+</html>
