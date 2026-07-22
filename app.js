@@ -452,6 +452,19 @@ function handleLogout() {
     document.getElementById('app-screen').classList.remove('active');
     document.getElementById('login-screen').classList.add('active');
     document.getElementById('login-form').reset();
+    
+    // Clear chat history
+    const chatMessages = document.getElementById('chat-messages');
+    if (chatMessages) {
+        chatMessages.innerHTML = `
+            <div class="chat-message bot">
+                <div class="bubble">
+                    ¡Bip bop! Hola, soy tu asistente virtual. Conozco todas las reglas de Tareo Planta y tengo acceso a tus registros. ¿En qué te puedo ayudar hoy?
+                </div>
+            </div>
+        `;
+    }
+    
     window.scrollTo(0, 0);
 }
 
