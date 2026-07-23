@@ -1738,8 +1738,8 @@ function getBotResponse(message) {
         return `📝 <b>¿Cómo registrar tu tareo?</b><br>1. Ve a la pestaña <b>Registro Diario</b>.<br>2. Selecciona la <b>Fecha</b> y tu <b>Turno</b>.<br>3. Busca tu <b>WO (Orden de Trabajo)</b>.<br>4. Ingresa las <b>Horas</b> (ej. 2.5) y el <b>Tipo</b> (Normales, SHE...).<br>5. Selecciona la <b>Actividad</b> y la <b>Máquina</b> (si aplica).<br>6. Dale al botón <b>"Guardar Registro"</b>.<br>¡Listo! Tus horas se sumarán en las barras de arriba.`;
     }
 
-    if (msg.includes('hola') || msg.includes('buenos') || msg.includes('tardes') || msg.includes('dias')) {
-        return `¡Hola, ${empName.split(' ')[0]}! 👋 Soy tu Asistente virtual.<br><br><b>💡 Puedes preguntarme sobre:</b><br><br>⏱️ <i>"¿Cuántas horas extra tengo?"</i><br>🎯 <i>"¿Cuánto me falta para terminar hoy?"</i><br>📊 <i>"Dame mi resumen semanal"</i><br>📅 <i>"¿Cómo veo mi resumen por fechas?"</i><br>📝 <i>"¿Cómo llenar mi tareo?"</i><br>🏖️ <i>"¿Cuántos permisos tengo?"</i><br>🌙 <i>"¿Puedo cruzar turnos de día y noche?"</i><br>🚧 <i>"Límites de horas por día"</i><br>✏️ <i>"¿Cómo edito un registro?"</i><br>👯 <i>"¿Cómo duplicar un registro?"</i>`;
+    if (msg.includes('hola') || msg.includes('buenos') || msg.includes('tardes') || msg.includes('dias') || msg.includes('días')) {
+        return `¡Hola, ${empName.split(' ')[0]}! 👋 Soy tu Asistente virtual.<br><br><b>💡 Puedes preguntarme sobre:</b><br><br>⏱️ <i>"¿Cuántas horas extra tengo?"</i><br>🎯 <i>"¿Cuánto me falta para terminar hoy?"</i><br>🗓️ <i>"¿Qué días me falta completar?"</i><br>📊 <i>"Dame mi resumen semanal"</i><br>📅 <i>"¿Cómo veo mi resumen por fechas?"</i><br>📝 <i>"¿Cómo llenar mi tareo?"</i><br>🏖️ <i>"¿Cuántos permisos tengo?"</i><br>🌙 <i>"¿Puedo cruzar turnos de día y noche?"</i><br>🚧 <i>"Límites de horas por día"</i><br>✏️ <i>"¿Cómo edito un registro?"</i><br>👯 <i>"¿Cómo duplicar un registro?"</i>`;
     }
     
     if (msg.includes('gracias') || msg.includes('agradecid') || msg.includes('excelente')) {
@@ -1751,5 +1751,5 @@ function getBotResponse(message) {
     }
 
     // Default Fallback
-    return `¡Bip bop! 🤖 Creo que no te entendí del todo.<br><br><b>💡 Intenta preguntarme sobre:</b><br><br>⏱️ <i>"Mis horas extra"</i><br>🎯 <i>"Cuánto me falta hoy"</i><br>📊 <i>"Resumen semanal"</i><br>📅 <i>"Resúmenes por fechas"</i><br>📝 <i>"Cómo llenar mi tareo"</i><br>🏖️ <i>"Mis permisos"</i><br>🌙 <i>"Reglas de cruce de turnos"</i><br>🚧 <i>"Límites por día"</i><br>✏️ <i>"Cómo editar un registro"</i>`;
+    return `¡Bip bop! 🤖 Creo que no te entendí del todo.<br><br><b>💡 Intenta preguntarme sobre:</b><br><br>⏱️ <i>"Mis horas extra"</i><br>🎯 <i>"Cuánto me falta hoy"</i><br>🗓️ <i>"Qué días me falta completar"</i><br>📊 <i>"Resumen semanal"</i><br>📅 <i>"Resúmenes por fechas"</i><br>📝 <i>"Cómo llenar mi tareo"</i><br>🏖️ <i>"Mis permisos"</i><br>🌙 <i>"Reglas de cruce de turnos"</i><br>🚧 <i>"Límites por día"</i><br>✏️ <i>"Cómo editar un registro"</i>`;
 }
