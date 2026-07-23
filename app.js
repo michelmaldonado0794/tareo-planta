@@ -1678,6 +1678,42 @@ function getBotResponse(message) {
         return `📅 <b>Resúmenes por Fechas:</b><br>Si quieres ver cuántas horas extras o permisos has acumulado en un rango específico (por ejemplo, de todo el mes o quincena), ve a la pestaña <b>"Mi Historial"</b>.<br>Allí encontrarás unos calendarios de "Desde" y "Hasta" para que saques tu propio resumen personalizado.`;
     }
     
+    if (msg.includes('dia') || msg.includes('día') || msg.includes('incompleto') || msg.includes('olvide') || msg.includes('falto')) {
+        // Evitar conflicto con el saludo de "buenos días"
+        if (msg.includes('buenos') || msg.includes('hola')) return getBotResponse('hola');
+        
+        const diasSemanaNombres = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        let diasFaltantes = [];
+        
+        const hoyStr = state.currentDate;
+        
+        for (let i = 0; i < 7; i++) {
+            const dStr = datesOfWeek[i];
+            if (dStr > hoyStr) break; // No evaluamos dias futuros
+            
+            const logsDelDia = state.logs.filter(l => l.usuario === empName && l.fecha === dStr);
+            let normalDelDia = 0;
+            let esNoche = false;
+            logsDelDia.forEach(l => {
+                if (l.tipo_hora === 'Normales') normalDelDia += parseFloat(l.horas) || 0;
+                if (l.turno === 'Noche') esNoche = true;
+            });
+            
+            const metaDiaria = esNoche ? 11.25 : 9.25;
+            
+            // Si el día está por debajo de la meta, está incompleto
+            if (normalDelDia < (metaDiaria - 0.1)) {
+                diasFaltantes.push(`<b>${diasSemanaNombres[i]}</b> (Registraste ${normalDelDia.toFixed(2)}h)`);
+            }
+        }
+        
+        if (diasFaltantes.length === 0) {
+            return `¡Estás al día! 🌟 Hasta hoy, has completado tus horas normales de todos los días de esta semana.`;
+        } else {
+            return `🗓️ <b>Días Incompletos:</b><br>Revisando tu registro de esta semana (hasta hoy), te falta completar tu tareo en estos días:<br><br>👉 ${diasFaltantes.join('<br>👉 ')}<br><br>¡Recuerda ponerte al día para no afectar tu racha!`;
+        }
+    }
+    
     if (msg.includes('resumen') || msg.includes('semana')) {
         return `📊 <b>Tu Resumen Semanal:</b><br>- Horas Normales: ${normalWeek.toFixed(2)} / 46.25<br>- Horas Extra: ${extraWeek.toFixed(2)}<br>- Permisos: ${permisosWeek.toFixed(2)}`;
     }
