@@ -297,14 +297,23 @@ function setupEventListeners() {
             display.value = '';
             display.style.color = 'var(--text-muted)';
             display.style.borderColor = 'var(--border-glass)';
+            window.alertShownForGeneralCost = false;
         } else if (found) {
             display.value = found.title || 'WO válida (sin título)';
             display.style.color = 'var(--accent-primary)';
             display.style.borderColor = 'var(--accent-primary)';
+            
+            if (val === '82702210' && !window.alertShownForGeneralCost) {
+                alert("⚠️ Estás enviando horas al Centro de Costos General. Estas horas NO suman a la productividad y este registro será enviado a revisión.");
+                window.alertShownForGeneralCost = true;
+            } else if (val !== '82702210') {
+                window.alertShownForGeneralCost = false;
+            }
         } else {
             display.value = '⚠️ WO NO EXISTE EN BASE DE DATOS';
             display.style.color = 'var(--danger)';
             display.style.borderColor = 'var(--danger)';
+            window.alertShownForGeneralCost = false;
         }
     });
     
@@ -1660,24 +1669,6 @@ function getBotResponse(message) {
         return `Hoy tienes <b>${extraToday.toFixed(2)} horas extra</b> registradas.<br>En total, en esta semana llevas <b>${extraWeek.toFixed(2)} horas extra</b>. ¡Buen trabajo! Recuerda que las horas extra deben estar autorizadas.`;
     }
     
-    if (msg.includes('falta') || msg.includes('restante') || msg.includes('normales')) {
-        let maxNormal = 9.25; // Default Dia
-        // Check si tiene algun registro de noche hoy
-        if (logsToday.some(l => l.turno === 'Noche')) maxNormal = 11.25;
-        
-        let faltanHoy = maxNormal - normalToday;
-        if (faltanHoy < 0) faltanHoy = 0;
-        
-        let faltanSemana = 46.25 - normalWeek;
-        if (faltanSemana < 0) faltanSemana = 0;
-
-        return `Hoy has registrado <b>${normalToday.toFixed(2)}</b> horas normales. Te faltan <b>${faltanHoy.toFixed(2)}</b> para completar tu turno de ${maxNormal}h.<br><br>Para llegar a la meta semanal de 46.25h, te faltan <b>${faltanSemana.toFixed(2)}h</b>.`;
-    }
-    
-    if (msg.includes('rango') || msg.includes('desde') || msg.includes('hasta') || msg.includes('fechas') || msg.includes('mes') || msg.includes('quincena')) {
-        return `📅 <b>Resúmenes por Fechas:</b><br>Si quieres ver cuántas horas extras o permisos has acumulado en un rango específico (por ejemplo, de todo el mes o quincena), ve a la pestaña <b>"Mi Historial"</b>.<br>Allí encontrarás unos calendarios de "Desde" y "Hasta" para que saques tu propio resumen personalizado.`;
-    }
-    
     if (msg.includes('dia') || msg.includes('día') || msg.includes('incompleto') || msg.includes('olvide') || msg.includes('falto')) {
         // Evitar conflicto con el saludo de "buenos días"
         if (msg.includes('buenos') || msg.includes('hola')) return getBotResponse('hola');
@@ -1712,6 +1703,24 @@ function getBotResponse(message) {
         } else {
             return `🗓️ <b>Días Incompletos:</b><br>Revisando tu registro de esta semana (hasta hoy), te falta completar tu tareo en estos días:<br><br>👉 ${diasFaltantes.join('<br>👉 ')}<br><br>¡Recuerda ponerte al día para no afectar tu racha!`;
         }
+    }
+    
+    if (msg.includes('falta') || msg.includes('restante') || msg.includes('normales')) {
+        let maxNormal = 9.25; // Default Dia
+        // Check si tiene algun registro de noche hoy
+        if (logsToday.some(l => l.turno === 'Noche')) maxNormal = 11.25;
+        
+        let faltanHoy = maxNormal - normalToday;
+        if (faltanHoy < 0) faltanHoy = 0;
+        
+        let faltanSemana = 46.25 - normalWeek;
+        if (faltanSemana < 0) faltanSemana = 0;
+
+        return `Hoy has registrado <b>${normalToday.toFixed(2)}</b> horas normales. Te faltan <b>${faltanHoy.toFixed(2)}</b> para completar tu turno de ${maxNormal}h.<br><br>Para llegar a la meta semanal de 46.25h, te faltan <b>${faltanSemana.toFixed(2)}h</b>.`;
+    }
+    
+    if (msg.includes('rango') || msg.includes('desde') || msg.includes('hasta') || msg.includes('fechas') || msg.includes('mes') || msg.includes('quincena')) {
+        return `📅 <b>Resúmenes por Fechas:</b><br>Si quieres ver cuántas horas extras o permisos has acumulado en un rango específico (por ejemplo, de todo el mes o quincena), ve a la pestaña <b>"Mi Historial"</b>.<br>Allí encontrarás unos calendarios de "Desde" y "Hasta" para que saques tu propio resumen personalizado.`;
     }
     
     if (msg.includes('resumen') || msg.includes('semana')) {
